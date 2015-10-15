@@ -1,0 +1,10 @@
+{{#if isBannerNeeded}}
+  <div style="background:red;width:100%;text-align:center;color:white;font-weight:bold">
+    <span style="vertical-align:middle;height:100%"> 
+      Voulez-vous bien que Google vous suivent ?
+      <button {{action 'consent' }} style="background:green;color:white;font-weight:bold;height:30px;width:50px;margin:5px;">Oui</button>
+      <button {{action 'decline' }} style="background:black;color:white;font-weight:bold;height:30px;width:50px;margin:5px;">Non</button>
+    </span>
+  </div>
+{{/if}}
+
