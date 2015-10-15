@@ -1,6 +1,11 @@
 # Ember-cookie-consent-cnil
 
-This README outlines the details of collaborating on this Ember addon.
+This addon is used to add the cookie agreement of the user which is ask by the french CNIL.
+
+To add it, install the npm module and add the {{cookie-consent}} component on of the 
+application.hbs template.
+
+As this is my first addon, dont blame me for bugs, but tell me where they are !!! Thanks in advance.
 
 ## Installation
 
