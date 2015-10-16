@@ -15,10 +15,8 @@ export default Ember.Component.extend({
   init:function(){
     this._super();
     let config = this.container.lookupFactory('config:environment');
-    console.log(config);
     var gaProperty = config.ga_id;
     if (gaProperty != null) {
-      console.log('google analytics id : ' + gaProperty);
       this.set('gaProperty',gaProperty);
     }
     else
@@ -26,25 +24,20 @@ export default Ember.Component.extend({
       throw new Error('Google ID for this website need to be set in environment.');
     }
     var hasConsent = Ember.$.cookie('hasConsent');
-    Ember.Logger.log('hasConsent : ' + hasConsent);
     if(!hasConsent) {
-      Ember.Logger.log("User has not decided yet.");
       this.set('isBannerNeeded',true);
     } else {
       if( hasConsent === "true" ){
         this.set('hasConsent',true);
-        Ember.Logger.log("User agreed to be follow.");
         Ember.run(this,'startGoogleAnalytics');
       } else {
         this.set('hasConsent',false);
-        Ember.Logger.log("User did not agreed to be follow.");
         Ember.run(this,'deleteGoogleAnalytics');
       }
     }
   },
 
   startGoogleAnalytics(){
-    Ember.Logger.log('start google analytics');
     // add gas script on <head>
     let gas = document.createElement('script'); 
     gas.type = 'text/javascript'; 
@@ -75,13 +68,11 @@ export default Ember.Component.extend({
   },
 
   stopGoogleAnalytics(){
-    Ember.Logger.log('stop google analytics');
     throw new Error('non implémenter');
   },
 
   actions:{
     consent:function(){
-      Ember.Logger.log('user is ok to be follow');
       this.set('isBannerNeeded',false);
  
       // User is ok to be follow:
@@ -99,7 +90,6 @@ export default Ember.Component.extend({
     },
 
     decline:function(){
-      Ember.Logger.log('user refuses to be follow');
       this.set('isBannerNeeded',false);
       Ember.$.cookie('hasConsent','false',{path:'/'});
       var disableStr='ga-disable-' + this.get('gaProperty');
@@ -109,7 +99,6 @@ export default Ember.Component.extend({
 
     // call from 'mentions légales' page during navigation...
     stop:function(){
-      Ember.Logger.log('user decides to stop to be follow');
       Ember.$.cookie('hasConsent','false',{path:'/'});
       var disableStr='ga-disable-' + this.get('gaProperty');
       Ember.$.cookie(disableStr,'true', { path: '/'} );
