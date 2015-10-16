@@ -6,6 +6,7 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
+    ga_id:'UA-68690340-1',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -21,7 +22,7 @@ module.exports = function(environment) {
     contentSecurityPolicy: {
       'default-src': "'unsafe-inline' 'inline' 'self'",
       'style-src': "'unsafe-inline' 'inline' 'self'",
-      'script-src':"'unsafe-inline' 'inline' 'self' http://www.google-analytics.com",
+      'script-src':"'unsafe-eval' 'unsafe-inline' 'inline' 'self' http://www.google-analytics.com",
       'img-src':"'unsafe-inline' 'inline' 'self' http://www.google-analytics.com",
     },
   };

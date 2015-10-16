@@ -7,7 +7,7 @@ application.hbs template.
 
 As this is my first addon, dont blame me for bugs, but tell me where they are !!! Thanks in advance.
 
-### IMPORTANT: Don't forget to update the GOOGLE_ID for your website inside addon/components/cookie-consent.js !!!
+### IMPORTANT: Don't forget to set your google_id inside environment file with the variable name  "ga_id"  !!!
 
 ## Installation
 
