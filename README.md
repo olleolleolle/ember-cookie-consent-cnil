@@ -29,4 +29,8 @@ As this is my first addon, dont blame me for bugs, but tell me where they are !!
 
 * `ember build`
 
+## TODO
+
+* Lot of lot of things...
+
 For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
