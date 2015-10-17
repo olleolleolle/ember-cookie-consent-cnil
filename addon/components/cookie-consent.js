@@ -16,37 +16,59 @@ export default Ember.Component.extend({
     this._super();
     let config = this.container.lookupFactory('config:environment');
     var gaProperty = config.ga_id;
+    
+    // check google id in environment:
     if (gaProperty != null) {
       this.set('gaProperty',gaProperty);
     }
     else
     {
-      throw new Error('Google ID for this website need to be set in environment.');
+      throw new Error('Google ID for this website need to be set in the "ga_id" environment variable.');
     }
-    var hasConsent = Ember.$.cookie('hasConsent');
-    if(!hasConsent) {
-      this.set('isBannerNeeded',true);
+
+    var dnt = navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack;
+    if( (dnt) ? (dnt || dnt === "yes" || dnt === 1 ||  dnt === "1") : false ){
+      console.log('DEBUG: do not track.' + dnt);
+      // check it is donottrack !
+      this.set('isBannerNeeded',false);
+      this.set('hasConsent',false);
+    }
+    else if (navigator.userAgent.indexOf("Prerender") > -1){
+      console.log('DEBUG: it is the prerender.');
+      // check it's the prerender !
+      this.set('isBannerNeeded',false);
+      this.set('hasConsent',false);
     } else {
-      if( hasConsent === "true" ){
-        this.set('hasConsent',true);
-        Ember.run(this,'startGoogleAnalytics');
+      var hasConsent = Ember.$.cookie('hasConsent');
+      if(!hasConsent) {
+        this.set('isBannerNeeded',true);
+        console.log('DEBUG: banner is needed:'); 
       } else {
-        this.set('hasConsent',false);
-        Ember.run(this,'deleteGoogleAnalytics');
+        if( hasConsent === "true" ){
+          console.log('DEBUG: user consents');
+          this.set('hasConsent',true);
+          Ember.run(this,'startGoogleAnalytics');
+        } else {
+          console.log('DEBUG: user declines');
+          this.set('hasConsent',false);
+          Ember.run(this,'deleteGoogleAnalytics');
+        }
       }
     }
   },
 
   startGoogleAnalytics(){
     // add gas script on <head>
-    let gas = document.createElement('script'); 
-    gas.type = 'text/javascript'; 
-    gas.async = true;
-    gas.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; 
-    s.parentNode.insertBefore(gas, s);
+    //let gas = document.createElement('script');
+    //gas.id = '
+    //gas.type = 'text/javascript'; 
+    //gas.async = true;
+    //gas.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    //var s = document.getElementsByTagName('script')[0]; 
+    //s.parentNode.insertBefore(gas, s);
 
-    gas = document.createElement('script'); 
+    let gas = document.createElement('script'); 
+    gas.id = 'google_analytics';
     gas.type = 'text/javascript'; 
     gas.async = false;
     gas.text = "" +
@@ -56,19 +78,21 @@ export default Ember.Component.extend({
       "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" +
       "ga('create', '" + this.get('gaProperty') + "', 'auto');" +
       "ga('send', 'pageview');";
-    s = document.getElementsByTagName('script')[0]; 
+    let s = document.getElementsByTagName('script')[0]; 
     s.parentNode.insertBefore(gas, s);
   },
 
   deleteGoogleAnalytics(){
-    var cookieNames = ["__utma","__utmb","__utmc","__utmt","__utmv","__utmz","_ga","_gat"];
-    for (var i=0; i<cookieNames.length; i++){
+    // delete google script:
+    let google_script = Ember.$['google_analyics'];
+    if(google_script){
+      google_script.remove();
+    }
+    // delete google cookie:
+    let cookieNames = ["__utma","__utmb","__utmc","__utmt","__utmv","__utmz","_ga","_gat"];
+    for (let i=0; i<cookieNames.length; i++){
       Ember.$.removeCookie(cookieNames[i]);
     }
-  },
-
-  stopGoogleAnalytics(){
-    throw new Error('non implémenter');
   },
 
   actions:{
@@ -78,31 +102,28 @@ export default Ember.Component.extend({
       // User is ok to be follow:
       var disableStr='ga-disable-' + this.get('gaProperty');
       Ember.$.removeCookie(disableStr,'true', { path: '/'} );
-      
+
       // 13 months in milliseconds..
       var cookieTimeout = 33696000000;
-      var date = new Date();
-      date.setTime(date.getTime()+cookieTimeout);
-      //var expirationDate = date.toGMTString();
+      var expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime()+cookieTimeout);
       //Write it too a permanent cookie (valid 13 months) to memorize it:
-      Ember.$.cookie('hasConsent','true', { path:'/'} /* expiration date failed on chromium... */);
+      Ember.$.cookie("hasConsent","true",{ expires:expirationDate, path:'/'});
       Ember.run(this,'startGoogleAnalytics');
     },
 
     decline:function(){
       this.set('isBannerNeeded',false);
-      Ember.$.cookie('hasConsent','false',{path:'/'});
+      
+      // 13 months in milliseconds..
+      var cookieTimeout = 33696000000;
+      var expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime()+cookieTimeout);
+      //Write it too a permanent cookie (valid 13 months) to memorize it:
+      Ember.$.cookie("hasConsent","false",{ expires:expirationDate, path:'/'});
       var disableStr='ga-disable-' + this.get('gaProperty');
       Ember.$.cookie(disableStr,'true', { path: '/'} );
       Ember.run(this,'deleteGoogleAnalytics');
-    },
-
-    // call from 'mentions légales' page during navigation...
-    stop:function(){
-      Ember.$.cookie('hasConsent','false',{path:'/'});
-      var disableStr='ga-disable-' + this.get('gaProperty');
-      Ember.$.cookie(disableStr,'true', { path: '/'} );
-      Ember.run(this,'stopGoogleAnalytics');
     }
   }
 });

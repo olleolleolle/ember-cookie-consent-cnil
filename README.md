@@ -1,13 +1,29 @@
 # Ember-cookie-consent-cnil
 
-This addon is used to add the cookie agreement of the user which is ask by the french CNIL.
+This add-on is used to add the google Analytics cookie (new  version) with the cookie agreement of the user which is ask by the french CNIL.
 
-To add it, install the npm module and add the {{cookie-consent}} component on of the 
+To add it, install the npm module and add the {{cookie-consent}} component on top of the
 application.hbs template.
 
-As this is my first addon, dont blame me for bugs, but tell me where they are !!! Thanks in advance.
+This add-on take care to add the google code script inside the head of each page. So there nothing else to do for activation but this:
 
 ### IMPORTANT: Don't forget to set your google_id inside environment file with the variable name  "ga_id"  !!!
+
+Once ga_id configured, the Google Analytics tracking code will be injected into your index.html file when user has agreed to be follow.
+A mixin is provided for simple page view tracking inside of your Ember application. To use it,
+include it inside your app/router.js file:
+
+* import Ember from 'ember';
+* import config from './config/environment';
+* import cookieConsent from './mixins/cookie-consent';
+*
+* var Router = Ember.Router.extend(cookieConsent, {
+*   location: config.locationType
+* });
+*
+* Router.map(function() {
+*   ...
+* });
 
 ## Installation
 
