@@ -27,8 +27,8 @@ export default Ember.Component.extend({
     }
 
     var dnt = navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack;
-    if( (dnt) ? (dnt || dnt === "yes" || dnt === 1 ||  dnt === "1") : false ){
-      console.log('DEBUG: do not track.' + dnt);
+    if( (dnt) ? (dnt === "yes" || dnt === 1 ||  dnt === "1") : false ){
+      console.log("DEBUG: 'donottrack' is activated." );
       // check it is donottrack !
       this.set('isBannerNeeded',false);
       this.set('hasConsent',false);
@@ -38,18 +38,24 @@ export default Ember.Component.extend({
       // check it's the prerender !
       this.set('isBannerNeeded',false);
       this.set('hasConsent',false);
-    } else {
+    } 
+    else if ((navigator.cookieEnabled)? false : true ) {
+      console.log('DEBUG: can not write cookie.');
+      this.set('isBannerNeeded',false);
+      this.set('hasConsent',false);
+    }
+    else {
       var hasConsent = Ember.$.cookie('hasConsent');
       if(!hasConsent) {
         this.set('isBannerNeeded',true);
-        console.log('DEBUG: banner is needed:'); 
+        console.log('DEBUG: banner is needed.'); 
       } else {
         if( hasConsent === "true" ){
-          console.log('DEBUG: user consents');
+          console.log('DEBUG: user consents.');
           this.set('hasConsent',true);
           Ember.run(this,'startGoogleAnalytics');
         } else {
-          console.log('DEBUG: user declines');
+          console.log('DEBUG: user declines.');
           this.set('hasConsent',false);
           Ember.run(this,'deleteGoogleAnalytics');
         }
@@ -58,15 +64,6 @@ export default Ember.Component.extend({
   },
 
   startGoogleAnalytics(){
-    // add gas script on <head>
-    //let gas = document.createElement('script');
-    //gas.id = '
-    //gas.type = 'text/javascript'; 
-    //gas.async = true;
-    //gas.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    //var s = document.getElementsByTagName('script')[0]; 
-    //s.parentNode.insertBefore(gas, s);
-
     let gas = document.createElement('script'); 
     gas.id = 'google_analytics';
     gas.type = 'text/javascript'; 
