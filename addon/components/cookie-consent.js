@@ -32,17 +32,20 @@ export default Ember.Component.extend({
       // check it is donottrack !
       this.set('isBannerNeeded',false);
       this.set('hasConsent',false);
+      this.destroy();
     }
     else if (navigator.userAgent.indexOf("Prerender") > -1){
       console.log('DEBUG: it is the prerender.');
       // check it's the prerender !
       this.set('isBannerNeeded',false);
       this.set('hasConsent',false);
+      this.destroy();
     } 
     else if ((navigator.cookieEnabled)? false : true ) {
       console.log('DEBUG: can not write cookie.');
       this.set('isBannerNeeded',false);
       this.set('hasConsent',false);
+      this.destroy();
     }
     else {
       var hasConsent = Ember.$.cookie('hasConsent');
@@ -77,6 +80,7 @@ export default Ember.Component.extend({
       "ga('send', 'pageview');";
     let s = document.getElementsByTagName('script')[0]; 
     s.parentNode.insertBefore(gas, s);
+    this.destroy();
   },
 
   deleteGoogleAnalytics(){
@@ -90,7 +94,34 @@ export default Ember.Component.extend({
     for (let i=0; i<cookieNames.length; i++){
       Ember.$.removeCookie(cookieNames[i]);
     }
+    this.destroy();
   },
+
+  handleOutsideClick: function(event) {
+    let $element = this.$();
+    let $target = Ember.$(event.target);
+    if($element){
+      if (!$target.parents("#gaBanner").length) {
+        console.log('click ouside component');
+        if(this){
+          this.send('consent');
+          this.destroy();
+        }
+      }
+    }
+  },
+
+  setupOutsideClickListener: Ember.on('didInsertElement', function() {
+    let clickHandler = this.get('handleOutsideClick').bind(this);
+
+    return Ember.$(document).on('click', clickHandler);
+  }),
+
+  removeOutsideClickListener: Ember.on('willDestroyElement', function() {
+    let clickHandler = this.get('handleOutsideClick').bind(this);
+
+    return Ember.$(document).off('click', clickHandler);
+  }),
 
   actions:{
     consent:function(){
@@ -107,6 +138,7 @@ export default Ember.Component.extend({
       //Write it too a permanent cookie (valid 13 months) to memorize it:
       Ember.$.cookie("hasConsent","true",{ expires:expirationDate, path:'/'});
       Ember.run(this,'startGoogleAnalytics');
+      this.destroy();
     },
 
     decline:function(){
@@ -121,6 +153,16 @@ export default Ember.Component.extend({
       var disableStr='ga-disable-' + this.get('gaProperty');
       Ember.$.cookie(disableStr,'true', { path: '/'} );
       Ember.run(this,'deleteGoogleAnalytics');
+      this.destroy();
+    },
+
+    more:function(){
+      try {
+        var router = this.container.lookup('router:main');
+        router.transitionTo('mentionslegales');
+      } catch ( error ) {
+        alert("A 'mentionslegales' route has to be define to give informations to user. Error is " + error);
+      } 
     }
   }
 });

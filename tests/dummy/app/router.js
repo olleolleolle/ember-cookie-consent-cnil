@@ -8,6 +8,7 @@ var Router = Ember.Router.extend(cookieConsent,{
 
 Router.map(function() {
   this.route('profile',{});
+  this.route('mentionslegales',{});
 });
 
 export default Router;
