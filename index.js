@@ -1,11 +1,13 @@
 /* jshint node: true */
 'use strict';
 
+var path = require('path');
+
 module.exports = {
   name: 'ember-cookie-consent-cnil',
 
   blueprintsPath:function(){
-    return path.join(_dirname,'blueprints');
+    return path.join(__dirname,'blueprints');
   },
 
   included: function(app) {

@@ -7,6 +7,8 @@ application.hbs template.
 
 This add-on take care to add the google code script inside the head of each page. So there nothing else to do for activation but this:
 
+Bower package 'jquery.cookie' is a dependency of this package. Make sure this package is installed, it should be but...
+
 ### IMPORTANT: Don't forget to set your google_id inside environment file with the variable name  "ga_id"  !!!
 
 Once ga_id configured, the Google Analytics tracking code will be injected into your index.html file when user has agreed to be follow.
@@ -24,6 +26,10 @@ include it inside your app/router.js file:
 * Router.map(function() {
 *   ...
 * });
+
+## Install as a ember addon:
+
+* `ember install ember-cookie-consent-cnil`
 
 ## Installation
 
