@@ -1,6 +1,6 @@
 {
   "name": "ember-cookie-consent-cnil",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description":"Ember add-on used to get the final user agreement for google analytic tool cookies needed by the french CNIL.",
   "directories": {
     "doc": "doc",
