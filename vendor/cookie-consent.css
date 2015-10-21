@@ -1,0 +1,33 @@
+
+div .cookieconsent {
+  background:lightgrey;
+  position:absolute;
+  top:0px;
+  z-index:99999;
+  width:100%;
+  text-align:center;
+}
+
+.cookieconsent span {
+  vertical-align:middle;
+  height:100%;
+}
+
+.cookieconsent .decline {
+  color:white;
+  background:black;
+  font-weight:italic;
+  height:30px;
+  width:50px;
+  margin:5px;
+}
+
+.cookieconsent .more {
+  color:white;
+  background:lightgreen;
+  font-weight:bold;
+  height:30px;
+  width:250px;
+  margin:5px;
+}
+

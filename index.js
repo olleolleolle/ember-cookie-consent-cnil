@@ -13,5 +13,6 @@ module.exports = {
   included: function(app) {
     this._super.included(app);
     app.import(app.bowerDirectory + '/jquery.cookie/jquery.cookie.js');
+    app.import('vendor/cookie-consent.css');
   }
 };

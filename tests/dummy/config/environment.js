@@ -20,11 +20,14 @@ module.exports = function(environment) {
     },
 
     contentSecurityPolicy: {
-      'default-src': "'unsafe-inline' 'inline' 'self'",
-      'style-src': "'unsafe-inline' 'inline' 'self'",
-      'script-src':"'unsafe-eval' 'unsafe-inline' 'inline' 'self' http://www.google-analytics.com",
-      'img-src':"'unsafe-inline' 'inline' 'self' http://www.google-analytics.com",
-    },
+      'default-src': "'none'",
+      'script-src': "'self' http://www.google-analytics.com",
+      'font-src': "'self'",
+      'connect-src': "'self'",
+      'img-src': "'self' http://www.google-analytics.com",
+      'style-src': "'self'",
+      'media-src': "'self'"
+    }
   };
 
   if (environment === 'development') {

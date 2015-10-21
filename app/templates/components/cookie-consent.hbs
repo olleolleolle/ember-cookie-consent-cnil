@@ -1,16 +1,12 @@
-<div id="gaBanner" style="margin:0px;padding:0px">
+<div id="gaBanner"> 
 {{#if isBannerNeeded}}
-  <div style="position:absolute;top:0px;z-index:99999;background:lightgrey;width:100%;text-align:center;color:black">
+  <div class="cookieconsent"> 
     <span style="vertical-align:middle;height:100%"> 
       En poursuivant la navigation sur ce site, vous autorisez celui-ci à utiliser des cookies à des fins de mesure d'audience...
-      <button {{action 'decline' }} style="background:black;color:white;font-weight:bold;height:30px;width:50px;margin:5px;">Non</button>
-      <button {{action 'more' }} style="background:lightgreen;color:white;font-weight:bold;height:30px;width:250px;margin:5px;">En savoir plus...</button>
+      <button {{action 'decline' }} class="consent">Refuser</button>
+      <button {{action 'more' }} class="more">En savoir plus...</button>
     </span>
-  </div>
-{{else}}
-  <div style="position:absolute;top:0px;z-index:0;width:0px;height:0px;">
   </div>
 {{/if}}
 </div>
-
 
