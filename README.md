@@ -56,3 +56,5 @@ include it inside your app/router.js file:
 * Lot of lot of things...
 
 For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+
+[![Package Quality](http://npm.packagequality.com/badge/ember-cookie-consent-cnil.png)](http://packagequality.com/#?package=ember-cookie-consent-cnil)
